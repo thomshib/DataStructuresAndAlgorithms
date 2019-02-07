@@ -291,6 +291,7 @@ namespace DataStructuresAndAlgorithms.Graphs
             for (int i = 0; i < array.Length; i++)
             {
                 array[i] = value;
+
             }
         }
 
