@@ -261,6 +261,7 @@ namespace DataStructuresAndAlgorithms.Graphs
         public List<Edge<T>> MinimunSpanningTreePrim()
         {
             List<Edge<T>> result = new List<Edge<T>>();
+            int[] previous = new int[Nodes.Count];
             bool[] isInMST = new bool[Nodes.Count];
             Fill(isInMST, false);
 
@@ -268,7 +269,6 @@ namespace DataStructuresAndAlgorithms.Graphs
 
             this.Nodes.ForEach(n => n.Key = int.MaxValue);
 
-            isInMST[0] = true;
             this.Nodes[0].Key = 0;
 
             BinaryHeap<Node<T>> priorityQueue = new BinaryHeap<Node<T>>(this.Nodes);
@@ -279,7 +279,28 @@ namespace DataStructuresAndAlgorithms.Graphs
                 Node<T> minNode = priorityQueue.Remove();
                 isInMST[minNode.Index] = true;
 
-                //iterate through all the adjacent vertices
+                //iterate through all the adjacent vertices of the minNode
+                //for the current vertex
+                    // if current vertex dest Node is not in MST
+                        //if dest Node.key > current vertex.Weight
+                            //remove dest Node from queue
+                            //update the dest Node.Key to current Vertex.Weight
+                 foreach(Edge<T> edge in minNode.GetEdges())
+                    {
+                    Node<T> to = edge.To;
+                    int weight = edge.Weight;
+
+                    if (!isInMST[to.Index] && weight < to.Key)
+                    {
+                        to.Key = edge.Weight;
+                        previous[to.Index] = minNode.Index;
+
+                        //remove and add back the node 
+                        //beacaz BinaryHeap cannot work with inplace changes of weight
+                        //.Remove(t)
+                        
+                    }
+                }       
 
             }
 

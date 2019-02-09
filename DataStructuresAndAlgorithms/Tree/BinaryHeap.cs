@@ -27,7 +27,7 @@ namespace DataStructuresAndAlgorithms.Tree
                 Add(item);
             }
         }
-        public void Add(T value)
+        public virtual void Add(T value)
         {
             //grow array if needed
             if (size >= array.Length - 1)
@@ -40,7 +40,7 @@ namespace DataStructuresAndAlgorithms.Tree
             BubbleUp();
         }
 
-        private void BubbleUp()
+        protected void BubbleUp()
         {
             //min
             int index = this.size;
@@ -71,7 +71,7 @@ namespace DataStructuresAndAlgorithms.Tree
             return array[1];
         }
 
-        public T Remove()
+        public virtual T Remove()
         {
             T result = Peek();
 
@@ -85,7 +85,7 @@ namespace DataStructuresAndAlgorithms.Tree
 
         }
 
-        private void BubbleDown()
+        protected void BubbleDown()
         {
             int index = 1;
 
@@ -133,7 +133,7 @@ namespace DataStructuresAndAlgorithms.Tree
             return (index * 2) + 1;
         }
 
-        private void Swap(int source, int target)
+        protected virtual void Swap(int source, int target)
         {
             T temp = array[source];
             array[source] = array[target];
