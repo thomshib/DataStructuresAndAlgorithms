@@ -34,6 +34,7 @@ namespace DataStructuresAndAlgorithms.Graphs
             graph.AddEdge(n7, n8, 6);
             graph.AddEdge(n8, n5, 3);
 
+           
             List<Node<int>> dfsNodes = graph.DFS();
             Console.WriteLine("Depth First Search");
             dfsNodes.ForEach(n => Console.WriteLine(n));
@@ -47,6 +48,13 @@ namespace DataStructuresAndAlgorithms.Graphs
             List<Edge<int>> mstKruskal = graph.MinimunSpanningTreeKruskal();
             Console.WriteLine("Minimim Spanning Tree Kruskal");
             mstKruskal.ForEach(e => Console.WriteLine(e));
+            Console.WriteLine("-----------------------------------");
+    
+           
+
+            List<Edge<int>> mstPrim = graph.MinimunSpanningTreePrim();
+            Console.WriteLine("Minimim Spanning Tree Prim");
+            mstPrim.ForEach(e => Console.WriteLine(e));
             Console.WriteLine("-----------------------------------");
         }
 

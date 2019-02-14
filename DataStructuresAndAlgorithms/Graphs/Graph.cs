@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Priority_Queue;
 
 namespace DataStructuresAndAlgorithms.Graphs
 {
@@ -260,8 +261,18 @@ namespace DataStructuresAndAlgorithms.Graphs
 
         public List<Edge<T>> MinimunSpanningTreePrim()
         {
+            //https://github.com/BlueRaja/High-Speed-Priority-Queue-for-C-Sharp/wiki/Getting-Started
+            //using priority queue from above
+            //create a isInMST list
+            //update the node weights to infinity
+            //create a priority queue
+            //initialize the root node weight to zero
+            //for the neighbour nodes of the root
+            //update the weights if the node is not in isInMST and egde weight from u->v is less than v's weight
+            //add parent node as u
+
             List<Edge<T>> result = new List<Edge<T>>();
-            int[] previous = new int[Nodes.Count];
+            int[] parent = new int[Nodes.Count];
             bool[] isInMST = new bool[Nodes.Count];
             Fill(isInMST, false);
 
@@ -270,13 +281,19 @@ namespace DataStructuresAndAlgorithms.Graphs
             this.Nodes.ForEach(n => n.Key = int.MaxValue);
 
             this.Nodes[0].Key = 0;
+            parent[this.Nodes[0].Index] = -1;
 
-            BinaryHeap<Node<T>> priorityQueue = new BinaryHeap<Node<T>>(this.Nodes);
+            //BinaryHeap<Node<T>> priorityQueue = new BinaryHeap<Node<T>>(this.Nodes);
+            SimplePriorityQueue<Node<T>> priorityQueue = new SimplePriorityQueue<Node<T>>();
 
-            while (!priorityQueue.IsEmpty())
+            this.Nodes.ForEach(n => priorityQueue.Enqueue(n, n.Key));
+           
+            
+
+            while (priorityQueue.Count != 0)
             {
                 //Extract the node with min key value
-                Node<T> minNode = priorityQueue.Remove();
+                Node<T> minNode = priorityQueue.Dequeue();
                 isInMST[minNode.Index] = true;
 
                 //iterate through all the adjacent vertices of the minNode
@@ -286,22 +303,32 @@ namespace DataStructuresAndAlgorithms.Graphs
                             //remove dest Node from queue
                             //update the dest Node.Key to current Vertex.Weight
                  foreach(Edge<T> edge in minNode.GetEdges())
-                    {
-                    Node<T> to = edge.To;
-                    int weight = edge.Weight;
+                  {
+                        Node<T> to = edge.To;
+                        int edgeWeight = edge.Weight;
 
-                    if (!isInMST[to.Index] && weight < to.Key)
+                    if (!isInMST[to.Index] && edgeWeight < to.Key)
                     {
-                        to.Key = edge.Weight;
-                        previous[to.Index] = minNode.Index;
-
-                        //remove and add back the node 
-                        //beacaz BinaryHeap cannot work with inplace changes of weight
-                        //.Remove(t)
+                        to.Key = edgeWeight;
+                        //update the queue with the new weight
+                        priorityQueue.UpdatePriority(to, edgeWeight);
+                        parent[to.Index] = minNode.Index;
+                                              
                         
                     }
                 }       
 
+            }
+
+            
+            for(int i=0; i < parent.Length; i++)
+            {
+                if (parent[i] != -1)
+                {
+                    Edge<T> edge = this[parent[i], i];
+                    result.Add(edge);
+                }
+                  
             }
 
             return result;
